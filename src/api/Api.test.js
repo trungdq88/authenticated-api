@@ -10,7 +10,7 @@ describe('Api', () => {
       .fn()
       .mockImplementation(() => (this.renewed ? renewToken : fakeAccessToken));
   }
-  const fakeHostname = `http://${Math.random()}`;
+  const fakePrefix = `http://${Math.random()}`;
   const fakeBody = Math.random();
 
   it('should return what fetch returns', async () => {
@@ -20,26 +20,23 @@ describe('Api', () => {
       .mockImplementation(() => ({ status: 200, body: fakeBody }));
     const api = new Api({
       tokenProvider: mockTokenProvider,
-      hostname: fakeHostname,
+      prefix: fakePrefix,
       fetcher: mockFetch,
     });
     const respnose = await api.get('/hello');
     expect(respnose).toEqual({ status: 200, body: fakeBody });
   });
 
-  it('should prepend hostname', async () => {
+  it('should prepend prefix', async () => {
     const mockTokenProvider = new MockTokenProvider();
     const mockFetch = jest.fn().mockImplementation(() => ({ status: 200 }));
     const api = new Api({
       tokenProvider: mockTokenProvider,
-      hostname: fakeHostname,
+      prefix: fakePrefix,
       fetcher: mockFetch,
     });
     await api.get('/hello');
-    expect(mockFetch).toBeCalledWith(
-      `${fakeHostname}/hello`,
-      expect.anything(),
-    );
+    expect(mockFetch).toBeCalledWith(`${fakePrefix}/hello`, expect.anything());
   });
 
   it('should call fetch with authentication header', async () => {
@@ -47,11 +44,11 @@ describe('Api', () => {
     const mockFetch = jest.fn().mockImplementation(() => ({ status: 200 }));
     const api = new Api({
       tokenProvider: mockTokenProvider,
-      hostname: fakeHostname,
+      prefix: fakePrefix,
       fetcher: mockFetch,
     });
     await api.get('/hello');
-    expect(mockFetch).toBeCalledWith(`${fakeHostname}/hello`, {
+    expect(mockFetch).toBeCalledWith(`${fakePrefix}/hello`, {
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${fakeAccessToken}`,
@@ -65,7 +62,7 @@ describe('Api', () => {
     const mockFetch = jest.fn().mockImplementation(() => ({ status: 401 }));
     const api = new Api({
       tokenProvider: mockTokenProvider,
-      hostname: fakeHostname,
+      prefix: fakePrefix,
       fetcher: mockFetch,
     });
     await api.get('/hello');
