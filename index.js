@@ -1,4 +1,2 @@
-import Api from './api/Api.js';
-import TokenProvider from './api/TokenProvider.js';
-
-export default { Api, TokenProvider };
+export { default as Api } from './api/Api.js';
+export { default as TokenProvider } from './api/TokenProvider.js';
