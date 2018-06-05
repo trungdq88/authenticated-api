@@ -34,6 +34,9 @@ export default class TokenProvider {
   getAccessTokenObject = () => this.data;
 
   isExpired = (now = new Date()) => {
+    if (!this.data || !this.data.createdAt || !this.data.expiresIn) {
+      return null;
+    }
     const expiredTime = new Date(
       (Number(this.data.createdAt) + Number(this.data.expiresIn)) * 1000
     );
