@@ -71,5 +71,9 @@ describe('TokenProvider', () => {
     expect(
       tp.isExpired(new Date('Tue Jun 05 2018 15:11:55 GMT+0700 (+07)'))
     ).toBeTruthy();
+    tp.setToken({});
+    expect(
+      tp.isExpired(new Date('Tue Jun 05 2018 15:11:55 GMT+0700 (+07)'))
+    ).toBeFalsy();
   });
 });
