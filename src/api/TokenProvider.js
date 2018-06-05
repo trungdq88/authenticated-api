@@ -1,41 +1,44 @@
 // Persistence token manage layer
-export default class TokenProvider {
-  hbAccessToken = null;
-  accessToken = null;
+const KEY = 'accessToken';
 
-  constructor(
-    {
-      accessTokenKey = 'accessToken',
-      refreshTokenKey = 'refreshToken',
-      expirationKey = 'accessTokenExpiration'
-    } = {}
-  ) {
-    this.accessTokenKey = accessTokenKey;
-    this.refreshTokenKey = refreshTokenKey;
-    this.expirationKey = expirationKey;
-    this.accessToken = localStorage.getItem(this.accessTokenKey);
-    this.refreshToken = localStorage.getItem(this.refreshTokenKey);
-    this.expiration = localStorage.getItem(this.expirationKey);
+export default class TokenProvider {
+  data = null;
+
+  constructor({ storage = window.localStorage, key = KEY } = {}) {
+    this.storage = storage;
+    this.key = key;
+    try {
+      this.data = JSON.parse(this.storage.getItem(this.key) || 'null');
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   // public
 
-  setToken = ({ accessToken, refreshToken, expiration }) => {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-    this.expiration = expiration;
-    localStorage.setItem(this.accessTokenKey, accessToken);
-    localStorage.setItem(this.refreshTokenKey, refreshToken);
-    localStorage.setItem(this.expirationKey, expiration);
+  setToken = ({ accessToken, refreshToken, expiresIn, createdAt }) => {
+    this.data = { accessToken, refreshToken, expiresIn, createdAt };
+    this.storage.setItem(this.key, JSON.stringify(this.data));
   };
 
   renewToken = async () => {
     // TODO: refresh token not working in BeePayCore, no way to renew token
   };
 
-  getAccessToken = () => this.accessToken;
+  getAccessToken = () => this.data && this.data.accessToken;
 
-  getAccessTokenExpiration = () => this.expiration;
+  getAccessTokenExpiration = () => this.data && this.data.expiresIn;
+
+  getAccessTokenCreatedAt = () => this.data && this.data.createdAt;
+
+  getAccessTokenObject = () => this.data;
+
+  isExpired = (now = new Date()) => {
+    const expiredTime = new Date(
+      (Number(this.data.createdAt) + Number(this.data.expiresIn)) * 1000
+    );
+    return expiredTime > now;
+  };
 
   hasAccessToken = () => !!this.accessToken;
 
