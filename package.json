@@ -1,6 +1,6 @@
 {
   "name": "authenticated-api",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "lib/index.js",
   "author": "Trung Dinh Quang <trungdq88@gmail.com>",
   "license": "MIT",
