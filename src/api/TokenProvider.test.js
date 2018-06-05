@@ -67,10 +67,10 @@ describe('TokenProvider', () => {
     const tp = new TokenProvider({ storage: mockLocalStorage });
     expect(
       tp.isExpired(new Date('Tue Jun 05 2018 15:11:58 GMT+0700 (+07)'))
-    ).toBeFalsy();
+    ).toBeTruthy();
     expect(
       tp.isExpired(new Date('Tue Jun 05 2018 15:11:55 GMT+0700 (+07)'))
-    ).toBeTruthy();
+    ).toBeFalsy();
     tp.setToken({});
     expect(
       tp.isExpired(new Date('Tue Jun 05 2018 15:11:55 GMT+0700 (+07)'))
