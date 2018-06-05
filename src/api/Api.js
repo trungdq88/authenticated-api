@@ -1,6 +1,6 @@
 export default class Api {
   COMMON_HEADERS = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   };
   UNAUTHORIZED = 401;
 
@@ -54,11 +54,11 @@ export default class Api {
     const headers = {
       ...options.headers,
       ...this.COMMON_HEADERS,
-      authorization: `Bearer ${this.tokenProvider.getAccessToken()}`,
+      authorization: `Bearer ${this.tokenProvider.getAccessToken()}`
     };
     return this.fetcher(this.prefix + url, {
       ...options,
-      headers,
+      headers
     });
   };
 
