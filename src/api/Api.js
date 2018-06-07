@@ -64,9 +64,9 @@ export default class Api {
 
   _authenticatedFetch = async (url, options) => {
     const headers = {
-      ...options.headers,
       ...this.COMMON_HEADERS,
       authorization: `Bearer ${this.tokenProvider.getAccessToken()}`,
+      ...options.headers,
     };
     return this.fetcher(this.prefix + url, {
       ...options,
