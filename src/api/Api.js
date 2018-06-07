@@ -1,5 +1,6 @@
 const DEFAULT_OPTIONS = {
   bodyPreprocessor: JSON.stringify,
+  headers: {},
 };
 export default class Api {
   COMMON_HEADERS = {
@@ -20,15 +21,17 @@ export default class Api {
   // public
 
   get = url => this._send(url, { method: 'GET' });
-  post = (url, body, { bodyPreprocessor } = DEFAULT_OPTIONS) =>
+  post = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
     this._send(url, {
       method: 'POST',
       body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+      headers,
     });
-  put = (url, body, { bodyPreprocessor } = DEFAULT_OPTIONS) => {
+  put = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) => {
     this._send(url, {
       method: 'PUT',
       body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+      headers,
     });
   };
   patch = () => {
