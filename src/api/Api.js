@@ -24,13 +24,12 @@ export default class Api {
       body: bodyPreprocessor ? bodyPreprocessor(body) : body,
       headers,
     });
-  put = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) => {
+  put = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
     this._send(url, {
       method: 'PUT',
       body: bodyPreprocessor ? bodyPreprocessor(body) : body,
       headers,
     });
-  };
   patch = () => {
     throw new Error('Not implemented yet');
   };
