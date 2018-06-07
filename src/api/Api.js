@@ -1,6 +1,9 @@
+const DEFAULT_OPTIONS = {
+  bodyPreprocessor: JSON.stringify,
+};
 export default class Api {
   COMMON_HEADERS = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   };
   UNAUTHORIZED = 401;
 
@@ -17,10 +20,16 @@ export default class Api {
   // public
 
   get = url => this._send(url, { method: 'GET' });
-  post = (url, body) =>
-    this._send(url, { method: 'POST', body: JSON.stringify(body) });
-  put = () => {
-    throw new Error('Not implemented yet');
+  post = (url, body, { bodyPreprocessor } = DEFAULT_OPTIONS) =>
+    this._send(url, {
+      method: 'POST',
+      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+    });
+  put = (url, body, { bodyPreprocessor } = DEFAULT_OPTIONS) => {
+    this._send(url, {
+      method: 'PUT',
+      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+    });
   };
   patch = () => {
     throw new Error('Not implemented yet');
@@ -54,11 +63,11 @@ export default class Api {
     const headers = {
       ...options.headers,
       ...this.COMMON_HEADERS,
-      authorization: `Bearer ${this.tokenProvider.getAccessToken()}`
+      authorization: `Bearer ${this.tokenProvider.getAccessToken()}`,
     };
     return this.fetcher(this.prefix + url, {
       ...options,
-      headers
+      headers,
     });
   };
 
