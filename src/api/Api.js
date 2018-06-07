@@ -1,11 +1,8 @@
 const DEFAULT_OPTIONS = {
   bodyPreprocessor: JSON.stringify,
-  headers: {},
+  headers: { 'Content-Type': 'application/json' },
 };
 export default class Api {
-  COMMON_HEADERS = {
-    'Content-Type': 'application/json',
-  };
   UNAUTHORIZED = 401;
 
   tokenProvider = null;
@@ -64,7 +61,6 @@ export default class Api {
 
   _authenticatedFetch = async (url, options) => {
     const headers = {
-      ...this.COMMON_HEADERS,
       authorization: `Bearer ${this.tokenProvider.getAccessToken()}`,
       ...options.headers,
     };
