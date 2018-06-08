@@ -30,12 +30,18 @@ export default class Api {
       body: bodyPreprocessor ? bodyPreprocessor(body) : body,
       headers,
     });
-  patch = () => {
-    throw new Error('Not implemented yet');
-  };
-  delete = () => {
-    throw new Error('Not implemented yet');
-  };
+  patch = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
+    this._send(url, {
+      method: 'PATCH',
+      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+      headers,
+    });
+  delete = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
+    this._send(url, {
+      method: 'DELETE',
+      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+      headers,
+    });
 
   // private
 
