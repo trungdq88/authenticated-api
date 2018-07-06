@@ -18,32 +18,25 @@ export default class Api {
   // public
 
   get = url => this._send(url, { method: 'GET' });
-  post = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
-    this._send(url, {
-      method: 'POST',
-      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
-      headers,
-    });
-  put = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
-    this._send(url, {
-      method: 'PUT',
-      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
-      headers,
-    });
-  patch = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
-    this._send(url, {
-      method: 'PATCH',
-      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
-      headers,
-    });
-  delete = (url, body, { bodyPreprocessor, headers } = DEFAULT_OPTIONS) =>
-    this._send(url, {
-      method: 'DELETE',
-      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
-      headers,
-    });
+  post = (...args) => method('POST', ...args);
+  put = (...args) => method('PUT', ...args);
+  patch = (...args) => method('PATCH', ...args);
+  delete = (...args) => method('DELETE', ...args);
 
   // private
+
+  method = (method, url, body, options) => {
+    const { bodyPreprocessor, headers } = {
+      ...DEFAULT_OPTIONS,
+      ...options,
+      headers: { ...DEFAULT_OPTIONS.headers, ...options.headers },
+    };
+    return this._send(url, {
+      method,
+      body: bodyPreprocessor ? bodyPreprocessor(body) : body,
+      headers,
+    });
+  };
 
   _send = async (...args) =>
     this._sendWithRetry(() => this._authenticatedFetch(...args));

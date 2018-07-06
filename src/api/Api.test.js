@@ -50,7 +50,6 @@ describe('Api', () => {
     await api.get('/hello');
     expect(mockFetch).toBeCalledWith(`${fakePrefix}/hello`, {
       headers: {
-        'Content-Type': 'application/json',
         authorization: `Bearer ${fakeAccessToken}`,
       },
       method: 'GET',
