@@ -18,10 +18,10 @@ export default class Api {
   // public
 
   get = url => this._send(url, { method: 'GET' });
-  post = (...args) => method('POST', ...args);
-  put = (...args) => method('PUT', ...args);
-  patch = (...args) => method('PATCH', ...args);
-  delete = (...args) => method('DELETE', ...args);
+  post = (...args) => this.method('POST', ...args);
+  put = (...args) => this.method('PUT', ...args);
+  patch = (...args) => this.method('PATCH', ...args);
+  delete = (...args) => this.method('DELETE', ...args);
 
   // private
 
