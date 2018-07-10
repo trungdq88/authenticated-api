@@ -2,6 +2,17 @@ const DEFAULT_OPTIONS = {
   bodyPreprocessor: JSON.stringify,
   headers: { 'Content-Type': 'application/json' },
 };
+
+const stripUndefinedValues = source => {
+  const obj = { ...source };
+  Object.keys(obj).forEach(key => {
+    if (obj[key] === undefined) {
+      delete obj[key];
+    }
+  });
+  return obj;
+};
+
 export default class Api {
   UNAUTHORIZED = 401;
 
@@ -58,10 +69,10 @@ export default class Api {
   };
 
   _authenticatedFetch = async (url, options) => {
-    const headers = {
+    const headers = stripUndefinedValues({
       authorization: `Bearer ${this.tokenProvider.getAccessToken()}`,
       ...options.headers,
-    };
+    });
     return this.fetcher(this.prefix + url, {
       ...options,
       headers,

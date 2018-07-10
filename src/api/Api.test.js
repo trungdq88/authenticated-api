@@ -23,8 +23,8 @@ describe('Api', () => {
       prefix: fakePrefix,
       fetcher: mockFetch,
     });
-    const respnose = await api.get('/hello');
-    expect(respnose).toEqual({ status: 200, body: fakeBody });
+    const response = await api.get('/hello');
+    expect(response).toEqual({ status: 200, body: fakeBody });
   });
 
   it('should prepend prefix', async () => {
@@ -70,5 +70,21 @@ describe('Api', () => {
     expect(mockFetch.mock.calls[1][1].headers.authorization).toEqual(
       `Bearer ${renewToken}`,
     );
+  });
+
+  it('should remove undefined headers', async () => {
+    const mockTokenProvider = new MockTokenProvider();
+    const mockFetch = jest.fn().mockImplementation(() => ({ status: 200 }));
+    const api = new Api({
+      tokenProvider: mockTokenProvider,
+      prefix: fakePrefix,
+      fetcher: mockFetch,
+    });
+    await api.post('/hello', {}, { headers: { a: 1, b: undefined } });
+    expect(mockFetch.mock.calls[0][1].headers).toEqual({
+      'Content-Type': 'application/json',
+      a: 1,
+      authorization: `Bearer ${fakeAccessToken}`,
+    });
   });
 });
